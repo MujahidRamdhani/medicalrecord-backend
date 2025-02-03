@@ -1,0 +1,152 @@
+###
+// Create Rekam Medis
+POST http://localhost:9999/api/rekamMedis/CreateRekamMedis
+Content-Type: application/json
+Accept: application/json
+  
+{
+  "No_RM": "RM-3176062708050006",
+  "NIK_Pasien": "3176062708050006",
+  "Nama_Pasien": "Maya Anggraini",
+  "Tgl_Periksa": "2025-01-14T08:15:30Z",
+ "Keluhan_Utama": "Sering merasa lelah dan lemah",
+  "Keluhan_Tambahan": "Pusing dan kulit tampak pucat",
+  "Lama_Sakit": "3 minggu",
+  "Alergi": "Tidak ada",
+  "Tekanan_Darah": "100/60",
+  "Tinggi_Badan": 165,
+  "Berat_Badan": 55,
+  "Detak_Nadi": 85,
+  "Pernafasan": 18,
+  "Suhu": 36.7,
+  "Detak_Jantung": 82,
+  "Diagnosis": "Anemia",
+  "Keterangan_Diagnosis": "Ditemukan kadar hemoglobin rendah dan gejala lemah tubuh",
+  "Tindakan": "Pemeriksaan darah lengkap, edukasi gizi, dan pemberian suplemen zat besi",
+  "Obat_Diberikan": "Tablet zat besi (ferrous sulfate) 200mg, Vitamin C 500mg"
+}
+
+
+
+###
+// Create Rekam Medis
+POST http://localhost:9999/api/rekamMedis/CreateAndUpdateRekamMedis
+Content-Type: application/json
+Accept: application/json
+
+{
+  "No_RM": "RM-66666666",
+  "NIK_Pasien": "66666666",
+  "Tinggi_Badan": 170, 
+  "Berat_Badan": 65, 
+  "Tekanan_Darah": "120/80",
+  "Nadi": 75, 
+  "Suhu_Badan": 36.5,
+  "Keluhan_Utama": "update Sakit kepala terus-menerus selama 3 hari terakhir",
+  "Alergi": "Penisilin",
+  "Diagnosis": "Migrain",
+  "Tindakan": "Pemeriksaan fisik dan pemberian resep",
+  "Obat_Diberikan": "Paracetamol 500mg, Ibuprofen 200mg",
+  "Instruksi_Lanjutan": "Istirahat yang cukup dan kontrol ulang dalam 7 hari",
+  "Catatan_Dokter": "Perlu evaluasi lebih lanjut jika gejala tidak membaik",
+  "Hasil_Laboratorium": "Nilai darah normal, tanpa kelainan",
+  "Rujukan": "Tidak ada"
+}
+
+
+###
+//Get All Asset
+GET http://localhost:9999/api/rekamMedis/GetAllRekamMedisByDokterId
+
+
+###
+// Update
+PUT http://localhost:9999/api/rekamMedis/UpdateRekamMedis/RM1234567890
+Content-Type: application/json
+Accept: application/json
+
+{
+  "No_RM": "RM1234567890",
+  "NIK_Pasien": "83837329292",
+  "Tinggi_Badan": 169, 
+  "Berat_Badan": 69, 
+  "Tekanan_Darah": "120/80",
+  "Nadi": 75, 
+  "Suhu_Badan": 36.5,
+  "Keluhan_Utama": "Update Sakit kepala terus-menerus selama 3 hari terakhir",
+  "Alergi": "Update Penisilin",
+  "Diagnosis": "Update Migrain",
+  "Tindakan": "Update Pemeriksaan fisik dan pemberian resep",
+  "Obat_Diberikan": "Update Paracetamol 500mg, Ibuprofen 200mg",
+  "Instruksi_Lanjutan": "Update Istirahat yang cukup dan kontrol ulang dalam 7 hari",
+  "Catatan_Dokter": "Update Perlu evaluasi lebih lanjut jika gejala tidak membaik",
+  "Hasil_Laboratorium": "Update Nilai darah normal, tanpa kelainan",
+  "Rujukan": "Update Tidak ada"
+}
+
+###
+// History RM
+PUT  http://localhost:9999/api/rekamMedis/HistoryRekamMedis/RM-3204053008790005
+Content-Type: application/json
+Accept: application/json
+
+###
+// History RM Pasien by NIK/RM
+PUT  http://localhost:9999/api/rekamMedis/HistoryRekamMedisFilterByPasienNIK/83837329292
+Content-Type: application/json
+Accept: application/json
+
+###
+// user by nik
+PUT  http://localhost:9999/api/users/findAllUsersByNIK/66666666
+Content-Type: application/json
+Accept: application/json
+
+###
+// History RM Login Pasien
+GET http://localhost:9999/api/rekamMedis/HistoryRekamMedisFilterByPasienLogin
+Content-Type: application/json
+Accept: application/json
+
+
+###
+// Create Hak Akses
+POST http://localhost:9999/api/hakAkses/CreateHakAkses
+Content-Type: application/json
+Accept: application/json
+
+{
+  "Id_Hak_Akses": "HA-RM-66666666",
+  "No_RM": "RM-66666666",
+  "NIK_Pasien": "66666666",
+  "Hak_Akses": "false"
+}
+
+###
+//Get All Filter By Dokter Id
+GET http://localhost:9999/api/hakAkses/GetAllhakAksesByNIPDokter
+
+###
+//Get All Filter By Hak Akses
+GET http://localhost:9999/api/rekamMedis/GetAllRekamMedisByDokterIdFilteredHakAksesTrue
+
+###
+//Get All Filter By Pasien NIK
+GET http://localhost:9999/api/hakAkses/GetAllhakAksesByPasienNIK
+
+
+###
+// Update
+PUT http://localhost:9999/api/hakAkses/UpdateHakAkses/3176062708050006198701012022011001
+Content-Type: application/json
+Accept: application/json
+
+{
+  "Hak_Akses": "False"
+}
+
+###
+// History HA
+PUT  http://localhost:9999/api/hakAkses/HistoryHakAkses/RM-3204053008790005
+Content-Type: application/json
+Accept: application/json

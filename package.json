@@ -1,0 +1,56 @@
+{
+  "name": "medical-record-backend",
+  "version": "1.0.0",
+  "description": "Medical Record Backend",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "pm2 start src/index.js --name medical-record-backend",
+    "stop": "pm2 stop medical-record-backend",
+    "dev": "nodemon src/index.js",
+    "test": "jest -i",
+    "db-migrate-dev-create-only": "npx prisma migrate dev --create-only",
+    "db-migrate-dev": "npx prisma migrate dev",
+    "db-seed": "node prisma/seed.js",
+    "db-reset": "npx prisma db push --force-reset "
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    }
+  },
+  "author": "Rizal Prasetia",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "@quixo3/prisma-session-store": "^3.1.13",
+    "argon2": "^0.30.3",
+    "axios-cookiejar-support": "^4.0.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "fabric-ca-client": "^2.2.18",
+    "fabric-network": "^2.2.18",
+    "http-status": "^1.6.2",
+    "joi": "^17.9.2",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.0",
+    "web3.storage": "^4.5.5",
+    "winston": "^3.9.0"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.22.5",
+    "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.2",
+    "@types/supertest": "^2.0.12",
+    "babel-jest": "^29.5.0",
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.22",
+    "prisma": "^5.22.0",
+    "supertest": "^6.3.3"
+  }
+}

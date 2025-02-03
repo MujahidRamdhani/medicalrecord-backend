@@ -1,0 +1,21 @@
+# Dependencies
+node_modules
+
+# debug
+npm-debug.log*
+
+# Environment varibales
+.env*
+!.env*.example
+
+# testing
+/coverage
+
+# misc
+.DS.Store
+**/.DS_Store
+
+# .idea
+.idea
+
+fabric-config.json

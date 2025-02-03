@@ -1,0 +1,209 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Akun {
+  id             String          @id @default(uuid()) @db.Char(36)
+  email          String          @unique @db.VarChar(200)
+  password       String          @db.VarChar(200)
+  role           Role
+  wallet         String          @default("FALSE") @db.VarChar(10)
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  adminpelayanan AdminPelayanan?
+  adminsistem    AdminSistem?
+  dokter         Dokter?
+  pasien         Pasien?
+
+  @@map("akun")
+}
+
+model AdminSistem {
+  id            String   @id @default(uuid()) @db.Char(36)
+  idAkun        String   @unique @map("id_akun") @db.Char(36)
+  idAdminSistem String?  @unique @db.Char(50)
+  nama          String   @db.VarChar(200)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  akun          Akun     @relation(fields: [idAkun], references: [id])
+
+  @@map("adminsistem")
+}
+
+model AdminPelayanan {
+  id                   String              @id @default(uuid()) @db.Char(36)
+  idAkun               String              @unique @map("id_akun") @db.Char(36)
+  nip                  String?             @map("nip_admin_pelayanan") @db.Char(18)
+  nama                 String              @db.VarChar(200)
+  jenisKelamin         Jenis_Kelamin
+  alamat               String              @db.Text
+  nomorTelepon         String              @map("nomor_telepon") @db.VarChar(20)
+  idPelayananKesehatan String?             @db.Char(36)
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
+  pelayananKesehatan   PelayananKesehatan? @relation(fields: [idPelayananKesehatan], references: [id])
+  akun                 Akun                @relation(fields: [idAkun], references: [id])
+
+  @@index([idPelayananKesehatan], map: "adminpelayanan_idPelayananKesehatan_fkey")
+  @@map("adminpelayanan")
+}
+
+model PelayananKesehatan {
+  id             String           @id @default(uuid()) @db.Char(36)
+  kodePelayanan  String?          @unique @db.Char(16)
+  nama           String           @db.VarChar(200)
+  tipe           TipePelayanan
+  alamat         String           @db.Text
+  nomorTelepon   String           @map("nomor_telepon") @db.VarChar(20)
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  adminPelayanan AdminPelayanan[]
+  dokter         Dokter[]
+  pasien         Pasien[]
+
+  @@map("pelayanankesehatan")
+}
+
+model Dokter {
+  id                   String              @id @default(uuid()) @db.Char(36)
+  idAkun               String              @unique @map("id_akun") @db.Char(36)
+  nip                  String?             @unique @db.Char(18)
+  nama                 String              @db.VarChar(200)
+  jenisKelamin         Jenis_Kelamin
+  spesialis            Spesialis
+  alamat               String              @db.Text
+  nomorTelepon         String              @map("nomor_telepon") @db.VarChar(20)
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
+  idPelayananKesehatan String?             @db.Char(36)
+  pelayananKesehatan   PelayananKesehatan? @relation(fields: [idPelayananKesehatan], references: [id])
+  akun                 Akun                @relation(fields: [idAkun], references: [id])
+  pemeriksaan          Pemeriksaan[]
+
+  @@index([idPelayananKesehatan], map: "dokter_idPelayananKesehatan_fkey")
+  @@map("dokter")
+}
+
+model Pasien {
+  id                   String              @id @default(uuid()) @db.Char(36)
+  idAkun               String              @unique @map("id_akun") @db.Char(36)
+  nik                  String?             @unique @db.Char(16)
+  noRM                 String              @db.VarChar(19)
+  nama                 String              @db.VarChar(200)
+  jenisKelamin         Jenis_Kelamin
+  tempatLahir          String              @db.VarChar(50)
+  tanggalLahir         DateTime            @db.Date
+  alamat               String              @db.Text
+  agama                Agama
+  golonganDarah        GolonganDarah
+  pekerjaan            String              @db.VarChar(40)
+  kewarganegaraan      Kewarganegaraan
+  nomorTelepon         String              @map("nomor_telepon") @db.VarChar(20)
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
+  idPelayananKesehatan String?             @db.Char(36)
+  pelayananKesehatan   PelayananKesehatan? @relation(fields: [idPelayananKesehatan], references: [id])
+  akun                 Akun                @relation(fields: [idAkun], references: [id])
+  pemeriksaan          Pemeriksaan[]
+
+  @@index([idPelayananKesehatan], map: "pasien_idPelayananKesehatan_fkey")
+  @@map("pasien")
+}
+
+model Pemeriksaan {
+  id        String            @id @default(uuid()) @db.Char(36)
+  nikPasien String?
+  nipDokter String?
+  tanggal   DateTime
+  selesai   StatusPemeriksaan
+  pasien    Pasien?           @relation(fields: [nikPasien], references: [nik], map: "pemeriksaanpasien_nikPasien_fkey")
+  dokter    Dokter?           @relation(fields: [nipDokter], references: [nip], map: "pemeriksaanpasien_nipDokter_fkey")
+
+  @@index([nikPasien], map: "pemeriksaanpasien_nikPasien_fkey")
+  @@index([nipDokter], map: "pemeriksaanpasien_nipDokter_fkey")
+  @@map("pemeriksaan")
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String   @db.Text
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("session")
+}
+
+enum Role {
+  ADMINSISTEM
+  ADMINPELAYANAN
+  DOKTER
+  PASIEN
+}
+
+enum Jenis_Kelamin {
+  LAKILAKI
+  PEREMPUAN
+}
+
+enum Spesialis {
+  UMUM
+  ANAK
+  KANDUNGAN
+  GIGI
+  PSIKOLOG
+  UROLOGI
+  JANTUNG
+  SARAF
+  THT
+  JIWA
+  PENYAKITDALAM
+  KULIT
+  MATA
+  PARU
+  GINJAL
+  REHABILITAS
+  ALERGI
+  HIPNOTERAPIS
+  BEDAH
+  GIZI
+}
+
+enum StatusPemeriksaan {
+  Selesai
+  BelumSelesai
+}
+
+enum TipePelayanan {
+  RUMAHSAKIT
+  PUSKESMAS
+  KLINIK
+}
+
+enum Agama {
+  ISLAM
+  KRISTEN
+  KATOLIK
+  HINDU
+  BUDHA
+  KONGHUCU
+}
+
+enum GolonganDarah {
+  TIDAKADA
+  A
+  B
+  AB
+  O
+}
+
+enum Kewarganegaraan {
+  WNI
+  WNA
+}

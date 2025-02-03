@@ -1,0 +1,201 @@
+###
+// Register adminpelayanan 
+POST http://localhost:9999/api/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "role": "adminpelayanan",
+  "nip": "77w66634ss77sww7",
+  "nama": "test",
+  "jenisKelamin": "PEREMPUAN",
+  "alamat": "Jl Kanattttn 12t",
+  "nomorTelepon": "0854541234532321",
+  "kodePelayanan": "02",
+  "namaPelayanan": "Rs Advent",
+  "tipePelayanan": "RUMAHSAKIT",
+  "alamatPelayanan": "Jl Cihampelas 28",
+  "nomorTeleponPelayanan": "927627891",
+
+  "email": "adminadvent9@gmail.com",
+  "password": "admin9"
+}
+
+
+###
+// Enroll CA 
+POST http://localhost:9999/api/users/InvokeCaUser
+Content-Type: application/json
+Accept: application/json
+
+{
+  "emailUser": "adminadvent3@gmail.com",
+  "roleUser": "adminpelayanan"
+}
+
+###
+// Register dokter  
+POST http://localhost:9999/api/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "role": "dokter",
+  "sip": "52222222333352",
+  "nama": "Sucipto",
+  "spesialis": "UMUM",
+  "jenisKelamin": "LAKILAKI",
+  "alamat": "Jl Setiabudhi No 38",
+  "nomorTelepon": "087266524415",
+  "idAdminPelayanan": "2864bdf8-abde-4f0f-9476-16fad479b1c8",
+  "email": "sucipto.33352.dokter12@gmail.com",
+  "password": "1234567890"
+}
+
+###
+// Register pasien 
+POST http://localhost:9999/api/users
+Content-Type: application/json
+Accept: application/json
+
+{
+  "role": "pasien",
+  "nik": "43146618166",
+  "nama": "Ilham",
+  "jenisKelamin": "LAKILAKI",
+  "alamat": "Jl Sejahtera No 39",
+  "tanggalLahir": "2002-06-23T18:22:00+00:00",
+  "nomorTelepon": "082656625524",
+  "idAdminPelayanan": "2864bdf8-abde-4f0f-9476-16fad479b1c8",
+  "email": "ilham.8166.pasien@gmail.co.id",
+  "password": "1234567890"
+}
+
+
+###
+// Login Dokter 
+POST http://localhost:9999/api/users/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "dokter.admin@rekammedis.co.id",
+  "password": "Dokter@RekamMedis2025"
+}
+
+###
+// Login Admin Sistem 
+POST http://localhost:9999/api/users/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "adminsistem.admin@rekammedis.co.id",
+  "password": "AdminSistem@RekamMedis2025"
+}
+
+###
+// Login Admin Pelayanan 
+POST http://localhost:9999/api/users/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "adminpelayanan.admin@rekammedis.co.id",
+  "password": "AdminPelayanan@RekamMedis2025"
+}
+ 
+###
+// Login Pasien 
+POST http://localhost:9999/api/users/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "pasien.admin@rekammedis.co.id",
+  "password": "Pasien@RekamMedis2025"
+}
+
+###
+// Me User 
+GET http://localhost:9999/api/users/me
+
+###
+// Tes 
+PUT http://localhost:9999/api/users/updateProfile
+
+###
+// Logout User 
+DELETE http://localhost:9999/api/users/logout
+
+###
+// check session
+GET http://localhost:9999/api/users/checkSession
+
+###
+// 
+GET http://localhost:9999/api/users/findAllUsersWithoutCA
+
+
+###
+// add janji temu
+POST http://localhost:9999/api/users/addJanjiTemu
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nikPasien": "3176062708050006",
+  "nipDokter": "198701012022011001"
+}
+
+###
+// get janji temu
+GET http://localhost:9999/api/users/getJanjiTemu
+Content-Type: application/json
+Accept: application/json
+
+###
+// get user by nik
+PUT http://localhost:9999/api/users/findAllUsersByNIK/3176062708050006
+Content-Type: application/json
+Accept: application/json
+
+###
+// Pelayanan 
+GET http://localhost:9999/api/users/199005232019121002/adminpelayanan
+
+###
+// cek dokter pelayanan 
+GET http://localhost:9999/api/users/findAllDokterByIdPelayanan
+
+###
+// cek pasien
+GET http://localhost:9999/api/users/findAllPasien
+
+###
+// cek janji temu pelayanan 
+GET http://localhost:9999/api/users/findAllJanjiTemuByIdPelayanan
+
+###
+// cek janji temu by nip dokter
+GET http://localhost:9999/api/users/findAllJanjiTemuByNIPDokter
+
+###
+// ganti password
+PUT http://localhost:9999/api/users/changePassword
+Content-Type: application/json
+Accept: application/json
+
+{
+  "newPassword": "Pasien@RekamMedis2024"
+}
+
+###
+// update profile
+PUT http://localhost:9999/api/users/updateProfile
+Content-Type: application/json
+Accept: application/json
+
+{
+  "alamat": "Jl. Cihampelas No 55"
+}
