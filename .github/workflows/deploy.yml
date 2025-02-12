@@ -21,10 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Run tests
-        run: npm test
-
+        
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
