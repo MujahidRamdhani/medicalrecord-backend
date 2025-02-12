@@ -1,0 +1,77 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build application
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/vps_key
+          chmod 600 ~/.ssh/vps_key
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+          echo "Host *\n    StrictHostKeyChecking no\n    IdentityFile ~/.ssh/vps_key" >> ~/.ssh/config
+
+      - name: Deploy to VPS
+        run: |
+          ssh -i ~/.ssh/vps_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            echo "Navigating to project directory..."
+            mkdir -p /home/${{ secrets.VPS_USER }}/app/medicalrecord-backend
+            cd /home/${{ secrets.VPS_USER }}/app/medicalrecord-backend
+
+            echo "Pulling latest code..."
+            git fetch --all
+            git reset --hard origin/main
+            git pull --rebase origin main
+
+            echo "Installing dependencies..."
+            npm install
+
+            echo "Checking if .env exists..."
+            if [ ! -f .env ]; then
+              echo "File .env tidak ditemukan! Pastikan konfigurasi environment tersedia."
+              exit 1
+            fi
+
+            echo "Generating Prisma Client..."
+            npx prisma generate
+
+            echo "Applying Prisma Migrations..."
+            npx prisma migrate deploy
+
+            echo "Building application..."
+            npm run build
+
+            echo "Ensuring PM2 is installed..."
+            npm install -g pm2
+
+            echo "Restarting application with PM2..."
+            pm2 list | grep "medicalrecord-backend" && pm2 restart medicalrecord-backend --update-env || pm2 start ecosystem.config.js --name medicalrecord-backend --update-env
+            pm2 save
+
+            echo "Deployment Selesai!"
+          EOF
